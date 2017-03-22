@@ -1,8 +1,8 @@
 function Sprite(){
   this.x = 0;
   this.y = 0;
-  this.vx = 100;
-  this.vy = 100;
+  this.vx = 0;
+  this.vy = 0;
   this.color  = "blue";
 }
 
