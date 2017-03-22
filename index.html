@@ -14,6 +14,8 @@
       ctx.fillText("Olá Mundo!",10,10);
 
       var azul = new Sprite();
+      var fuel = 100;
+      var acelerando = false;
       var vermelho = new Sprite();
       vermelho.x = 150;
       vermelho.y = 100;
@@ -32,9 +34,13 @@
         ctx.clearRect(0,0,eCanvas.width,eCanvas.height);
         ctx.fillStyle = "darkgreen";
         ctx.fillText('dt: ' + dt + " fps: " + Math.floor(1/dt), 10, 10);
-
+        ctx.fillStyle = 'green';
+        ctx.fillRect(20,20,fuel,5);
         azul.mover(dt);
         vermelho.mover(dt);
+        if(acelerando) {
+          fuel = fuel - 5*dt;
+        }
 
         azul.desenhar(ctx);
         vermelho.desenhar(ctx);
@@ -46,16 +52,23 @@
         switch (e.keyCode) {
           case 37:
             azul.ax = -100;
+            acelerando = true;
             break;
           case 38:
             azul.ay = -100;
+            acelerando = true;
             break;
           case 39:
             azul.ax = +100;
+            acelerando = true;
             break;
           case 40:
             azul.ay = +100;
+            acelerando = true;
             break;
+          /*case 32:
+              azul.vy = azul.vy - 80;
+              break;*/
           default:
 
         }
@@ -65,15 +78,19 @@
         switch (e.keyCode) {
           case 37:
             azul.ax = 0;
+            acelerando = false;
             break;
           case 38:
             azul.ay = 0;
+            acelerando = false;
             break;
           case 39:
             azul.ax = 0;
+            acelerando = false;
             break;
           case 40:
             azul.ay = 0;
+            acelerando = false;
             break;
           default:
 
