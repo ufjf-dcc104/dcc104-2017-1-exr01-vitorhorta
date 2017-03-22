@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title></title>
+    <script src="Sprite.js" charset="utf-8"></script>
   </head>
   <body>
     <h1>DCC104 - Exemplo 01</h1>
@@ -12,10 +13,11 @@
       var ctx = eCanvas.getContext('2d');
       ctx.fillText("Olá Mundo!",10,10);
 
-      var azul = {
-        x: 0,
-        y: 50
-      };
+      var azul = new Sprite();
+      var vermelho = new Sprite();
+      vermelho.x = 150;
+      vermelho.y = 100;
+
       var fps = 60;
       var atual = new Date();
       var anterior = new Date();
@@ -31,26 +33,13 @@
         ctx.fillStyle = "darkgreen";
         ctx.fillText('dt: ' + dt + " fps: " + Math.floor(1/dt), 10, 10);
 
-        azul.x = azul.x + (30*dt);
-        azul.y = azul.y + (10*dt);
+        azul.mover(dt);
+        vermelho.mover(dt);
 
-        desenhaAzul(ctx);
-        desenhaVermelho(ctx);
+        azul.desenhar(ctx);
+        vermelho.desenhar(ctx);
+        vermelho.color = 'red';
         anterior = atual;
-      }
-
-      function desenhaAzul(ctx) {
-        ctx.fillStyle = "blue";
-        ctx.fillRect(azul.x,azul.y,15, 15);
-        ctx.lineWidth = 2;
-        ctx.strokeRect(azul.x,azul.y,15, 15);
-      }
-
-      function desenhaVermelho(ctx) {
-        ctx.fillStyle = "red";
-        ctx.fillRect(45,50,15, 15);
-        ctx.lineWidth = 2;
-        ctx.strokeRect(45,50,15, 15);
       }
 
     </script>
