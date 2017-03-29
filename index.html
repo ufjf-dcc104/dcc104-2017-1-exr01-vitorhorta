@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <title></title>
     <script src="Sprite.js" charset="utf-8"></script>
+    <script src="Level.js" charset="utf-8"></script>
+
   </head>
   <body>
     <h1>DCC104 - Exemplo 01</h1>
@@ -11,19 +13,13 @@
     <script>
       var eCanvas = document.getElementsByTagName('canvas')[0];
       var ctx = eCanvas.getContext('2d');
-      ctx.fillText("Olá Mundo!",10,10);
 
       var azul = new Sprite();
-      var fuel = 100;
-      var acelerando = false;
-      var vermelho = new Sprite();
-      vermelho.x = 150;
-      vermelho.y = 100;
+      var level = new Level();
+      level.init();
 
-      var fps = 60;
       var atual = new Date();
       var anterior = new Date();
-      var dt = 1/fps;
       desenha();
 
       function desenha() {
@@ -32,19 +28,19 @@
         dt = (atual - anterior)/1000;
 
         ctx.clearRect(0,0,eCanvas.width,eCanvas.height);
-        ctx.fillStyle = "darkgreen";
-        ctx.fillText('dt: ' + dt + " fps: " + Math.floor(1/dt), 10, 10);
-        ctx.fillStyle = 'green';
-        ctx.fillRect(20,20,fuel,5);
+
         azul.mover(dt);
-        vermelho.mover(dt);
-        if(acelerando) {
-          fuel = fuel - 5*dt;
-        }
+        level.mover(dt);
+
+        azul.color = "blue";
+
+        level.colidiu(azul, function(inimigo,algo){
+          inimigo.color = "red";
+        });
 
         azul.desenhar(ctx);
-        vermelho.desenhar(ctx);
-        vermelho.color = 'red';
+        level.desenhar(ctx);
+
         anterior = atual;
       }
 
@@ -52,23 +48,16 @@
         switch (e.keyCode) {
           case 37:
             azul.ax = -100;
-            acelerando = true;
             break;
           case 38:
             azul.ay = -100;
-            acelerando = true;
             break;
           case 39:
             azul.ax = +100;
-            acelerando = true;
             break;
           case 40:
             azul.ay = +100;
-            acelerando = true;
             break;
-          /*case 32:
-              azul.vy = azul.vy - 80;
-              break;*/
           default:
 
         }
@@ -78,19 +67,15 @@
         switch (e.keyCode) {
           case 37:
             azul.ax = 0;
-            acelerando = false;
             break;
           case 38:
             azul.ay = 0;
-            acelerando = false;
             break;
           case 39:
             azul.ax = 0;
-            acelerando = false;
             break;
           case 40:
             azul.ay = 0;
-            acelerando = false;
             break;
           default:
 
