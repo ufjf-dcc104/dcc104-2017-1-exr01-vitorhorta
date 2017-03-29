@@ -31,3 +31,9 @@ Level.prototype.colidiu = function (alvo, resolveColisao) {
     }
   }
 };
+
+Level.prototype.perseguir = function (alvo, dt) {
+  for (var i = 0; i < this.sprites.length; i++) {
+    this.sprites[i].perseguir(alvo,dt);
+  }
+}

@@ -33,7 +33,7 @@
         level.mover(dt);
 
         azul.color = "blue";
-
+        level.perseguir(azul,dt);
         level.colidiu(azul, function(inimigo,algo){
           inimigo.color = "red";
         });
