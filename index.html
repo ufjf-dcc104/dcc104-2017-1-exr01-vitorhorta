@@ -15,6 +15,8 @@
       var ctx = eCanvas.getContext('2d');
 
       var azul = new Sprite();
+      azul.x = 40;
+      azul.y = 75;
       var level = new Level();
       level.init();
 
@@ -29,14 +31,15 @@
 
         ctx.clearRect(0,0,eCanvas.width,eCanvas.height);
 
-        azul.mover(dt);
+        azul.moverAng(dt);
         level.mover(dt);
 
         azul.color = "blue";
-        level.perseguir(azul,dt);
+        level.perseguirAng(azul,dt);
         level.colidiu(azul, function(inimigo,algo){
           inimigo.color = "red";
         });
+        level.colidiuComTiros();
 
         azul.desenhar(ctx);
         level.desenhar(ctx);
@@ -46,17 +49,19 @@
 
       addEventListener("keydown",function (e){
         switch (e.keyCode) {
+          case 32:
+            level.fire(azul);
           case 37:
-            azul.ax = -100;
+            azul.vang = -100;
             break;
           case 38:
-            azul.ay = -100;
+            azul.am = 100;
             break;
           case 39:
-            azul.ax = +100;
+            azul.vang = +100;
             break;
           case 40:
-            azul.ay = +100;
+            azul.am = -100;
             break;
           default:
 
@@ -66,16 +71,16 @@
       addEventListener("keyup",function (e){
         switch (e.keyCode) {
           case 37:
-            azul.ax = 0;
+            azul.vang = 0;
             break;
           case 38:
-            azul.ay = 0;
+            azul.am = 0;
             break;
           case 39:
-            azul.ax = 0;
+            azul.vang = 0;
             break;
           case 40:
-            azul.ay = 0;
+            azul.am = 0;
             break;
           default:
 
