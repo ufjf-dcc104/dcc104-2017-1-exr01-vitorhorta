@@ -26,8 +26,8 @@ Sprite.prototype.desenhar = function (ctx) {
   ctx.fill();
   ctx.strokeStyle = "black";
   ctx.stroke();
-  //ctx.strokeStyle = "black";
-  //ctx.strokeRect(-this.width/2,-this.height/2,this.width,this.width);
+  ctx.strokeStyle = "black";
+  ctx.strokeRect(-this.width/2,-this.height/2,this.width,this.width);
   ctx.restore();
 };
 
