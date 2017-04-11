@@ -13,6 +13,27 @@
       var ctx = eCanvas.getContext('2d');
       ctx.fillText("Olá Mundo!",10,10);
 
+      var pistaPouso = new Sprite();
+      pistaPouso.color = "green";
+      pistaPouso.width = 250;
+      pistaPouso.height = 250;
+      pistaPouso.x = 200;
+      pistaPouso.y = 120;
+
+      var barreira = new Sprite();
+      barreira.color = "red";
+      barreira.width = 36;
+      barreira.height = 36;
+      barreira.x = 50;
+      barreira.y = 50;
+
+      var barreira2 = new Sprite();
+      barreira2.color = "red";
+      barreira2.width = 30;
+      barreira2.height = 30;
+      barreira2.x = 50;
+      barreira2.y = 120;
+
       var azul = new Sprite();
       var fuel = 100;
       var acelerando = false;
@@ -24,28 +45,83 @@
       var atual = new Date();
       var anterior = new Date();
       var dt = 1/fps;
+      var gameRunning = true;
+
       desenha();
-
       function desenha() {
-        requestAnimationFrame(desenha);
-        atual = new Date();
-        dt = (atual - anterior)/1000;
+          if(gameRunning) {
+            requestAnimationFrame(desenha);
+            atual = new Date();
+            dt = (atual - anterior)/1000;
 
-        ctx.clearRect(0,0,eCanvas.width,eCanvas.height);
-        ctx.fillStyle = "darkgreen";
-        ctx.fillText('dt: ' + dt + " fps: " + Math.floor(1/dt), 10, 10);
-        ctx.fillStyle = 'green';
-        ctx.fillRect(20,20,fuel,5);
-        azul.mover(dt);
-        vermelho.mover(dt);
-        if(acelerando) {
-          fuel = fuel - 5*dt;
+            ctx.clearRect(0,0,eCanvas.width,eCanvas.height);
+            ctx.fillStyle = "darkgreen";
+            ctx.fillText('dt: ' + dt + " fps: " + Math.floor(1/dt), 10, 10);
+            ctx.fillStyle = 'green';
+            ctx.fillRect(20,20,fuel,5);
+            azul.mover(dt);
+            vermelho.mover(dt);
+            if(acelerando) {
+              fuel = fuel - 10*dt;
+            }
+
+            azul.desenhar(ctx);
+            vermelho.desenhar(ctx);
+            pistaPouso.desenhar(ctx);
+            barreira.desenhar(ctx);
+            barreira2.desenhar(ctx);
+            checkWinLoseConditions(azul,pistaPouso,fuel,ctx);
+            vermelho.color = 'red';
+            anterior = atual;
         }
+      }
 
-        azul.desenhar(ctx);
-        vermelho.desenhar(ctx);
-        vermelho.color = 'red';
-        anterior = atual;
+      function checkWinLoseConditions(azul,pistaPouso,fuel,ctx){
+        if(gameRunning){
+          if(fuelOver(fuel)){
+            winOrLose(false,ctx);
+            return true;
+          }
+
+          if(colidiuComInimigos(azul,[barreira,barreira2])){
+            winOrLose(false,ctx);
+            return true;
+          }
+
+          if(azul.colidiuCom(pistaPouso)){
+            checkSpeedCondition(azul,ctx)
+            return true;
+          }
+          return false;
+        }
+      }
+
+      function fuelOver(fuel){
+        return fuel <= 0;
+      }
+
+      function checkSpeedCondition(azul,ctx){
+        if(azul.vx > 50 || azul.vy > 50){
+          winOrLose(false,ctx);
+          return;
+        }
+        winOrLose(true,ctx);
+      }
+
+      function winOrLose(playerWins,ctx){
+        gameRunning = false;
+        message = (playerWins) ? "VICTORY!" : "GAME OVER!";
+        ctx.fillStyle = "darkgreen";
+        ctx.fillText(message, 100, 50);
+      }
+
+      function colidiuComInimigos(azul,arrayInimigos){
+         for(i=0; i < arrayInimigos.length; i++){
+           if(azul.colidiuCom(arrayInimigos[i])){
+             return true
+           }
+         }
+         return false;
       }
 
       addEventListener("keydown",function (e){
