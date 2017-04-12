@@ -19,6 +19,8 @@
       imageLib.load('pc',"img/player_ship.png");
       imageLib.load('enemy',"img/enemy_1.png");
       imageLib.load('shot',"img/player_ship.png");
+      imageLib.load('sheet',"img/preview_16.png");
+
       var azul = new Sprite();
       azul.x = 40;
       azul.y = 75;
@@ -46,7 +48,7 @@
           inimigo.color = "red";
         });
         level.colidiuComTiros();
-
+        imageLib.drawSprite(ctx,"sheet",0,0,128,102,100,100,128,102);
         azul.desenharImg(ctx,imageLib.images['pc']);
         level.desenharImg(ctx);
 
