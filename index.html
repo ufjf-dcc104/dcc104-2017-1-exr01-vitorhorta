@@ -9,10 +9,13 @@
   </head>
   <body>
     <h1>DCC104 - Exemplo 01</h1>
-    <canvas></canvas>
+    <canvas width="500" height="500"></canvas>
     <script>
       var eCanvas = document.getElementsByTagName('canvas')[0];
       var ctx = eCanvas.getContext('2d');
+
+      var imgPC = new Image();
+      imgPC.src = "img/player_ship.png";
 
       var azul = new Sprite();
       azul.x = 40;
@@ -41,7 +44,7 @@
         });
         level.colidiuComTiros();
 
-        azul.desenhar(ctx);
+        azul.desenharImg(ctx,imgPC);
         level.desenhar(ctx);
 
         anterior = atual;
