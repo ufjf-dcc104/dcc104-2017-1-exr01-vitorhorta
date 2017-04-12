@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title></title>
+    <script src="ImageLoader.js" charset="utf-8"></script>
     <script src="Sprite.js" charset="utf-8"></script>
     <script src="Level.js" charset="utf-8"></script>
 
@@ -14,13 +15,15 @@
       var eCanvas = document.getElementsByTagName('canvas')[0];
       var ctx = eCanvas.getContext('2d');
 
-      var imgPC = new Image();
-      imgPC.src = "img/player_ship.png";
-
+      var imageLib = new ImageLoader();
+      imageLib.load('pc',"img/player_ship.png");
+      imageLib.load('enemy',"img/enemy_1.png");
+      imageLib.load('shot',"img/player_ship.png");
       var azul = new Sprite();
       azul.x = 40;
       azul.y = 75;
       var level = new Level();
+      level.imageLib = imageLib;
       level.init();
 
       var atual = new Date();
@@ -44,8 +47,8 @@
         });
         level.colidiuComTiros();
 
-        azul.desenharImg(ctx,imgPC);
-        level.desenhar(ctx);
+        azul.desenharImg(ctx,imageLib.images['pc']);
+        level.desenharImg(ctx);
 
         anterior = atual;
       }
