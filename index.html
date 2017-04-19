@@ -62,8 +62,7 @@
       addEventListener("keydown",function (e){
         switch (e.keyCode) {
           case 32:
-            level.fire(azul);
-            audioLoader.play("shot");
+            level.fire(azul,audioLoader,"shot");
           case 37:
             azul.vang = -100;
             break;

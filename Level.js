@@ -90,7 +90,7 @@ Level.prototype.perseguirAng = function (alvo, dt) {
   }
 }
 
-Level.prototype.fire = function(alvo){
+Level.prototype.fire = function(alvo,audiolib,key){
   if(alvo.cooldown > 0) return;
   var tiro = new Sprite();
   tiro.x = alvo.x;
@@ -102,14 +102,18 @@ Level.prototype.fire = function(alvo){
   tiro.imgKey = "shot";
   this.shots.push(tiro);
   alvo.cooldown = 1;
+  if(audiolib && key) audiolib.play(key);
 }
 
-Level.prototype.colidiuComTiros = function() {
+Level.prototype.colidiuComTiros = function(audiolib,key) {
   var that = this;
   for(var i = this.shots.length-1; i>=0; i--) {
     this.colidiu(this.shots[i], function(alvo){
       alvo.color = "green";
       that.shots.splice(i,i);
+      x  = that.sprites.indexOf(alvo);
+      that.sprites.splice(x,1);
+      if(audiolib && key) audiolib.play(key);
     })
   }
 }

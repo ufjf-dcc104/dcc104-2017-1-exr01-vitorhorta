@@ -16,14 +16,16 @@ AudioLoader.prototype.load = function(key, url) {
   this.audios[key].load();
 };
 
-AudioLoader.prototype.play = function(key) {
+AudioLoader.prototype.play = function(key,volume) {
   var agora = new Date();
   for(var i=0; i < this.canais.length; i++){
     var canal = this.canais[i];
     if(canal.fim < agora.getTime()) {
       canal.audio.src = this.audios[key].src;
       canal.fim = agora.getTime() + this.audios[key].duration * 1000;
+      canal.audio.volume = volume ? volume : 1;
       canal.audio.play();
+      break;
     }
   }
 }
