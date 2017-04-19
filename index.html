@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title></title>
     <script src="ImageLoader.js" charset="utf-8"></script>
+    <script src="AudioLoader.js" charset="utf-8"></script>
     <script src="Sprite.js" charset="utf-8"></script>
     <script src="Level.js" charset="utf-8"></script>
 
@@ -21,6 +22,9 @@
       imageLib.load('shot',"img/player_ship.png");
       imageLib.load('sheet',"img/preview_16.png");
 
+      var audioLoader = new AudioLoader();
+      audioLoader.load("shot","sounds/Missile.mp3");
+      audioLoader.load("boom","sounds/Grenade.mp3");
       var azul = new Sprite();
       azul.x = 40;
       azul.y = 75;
@@ -59,6 +63,7 @@
         switch (e.keyCode) {
           case 32:
             level.fire(azul);
+            audioLoader.play("shot");
           case 37:
             azul.vang = -100;
             break;
