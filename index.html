@@ -1,178 +1,230 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
     <title></title>
     <script src="Sprite.js" charset="utf-8"></script>
-  </head>
-  <body>
-    <h1>DCC104 - Exemplo 01</h1>
-    <canvas></canvas>
-    <script>
-      var eCanvas = document.getElementsByTagName('canvas')[0];
-      var ctx = eCanvas.getContext('2d');
-      ctx.fillText("Olá Mundo!",10,10);
+    <script src="ImageLoader.js" charset="utf-8"></script>
+</head>
+<body>
+<h1>DCC104 - Exemplo 01</h1>
+<canvas></canvas>
+<script>
+    var il = new ImageLoader();
+    il.load("bg", "bg.jpg");
 
-      var pistaPouso = new Sprite();
-      pistaPouso.color = "green";
-      pistaPouso.width = 250;
-      pistaPouso.height = 250;
-      pistaPouso.x = 200;
-      pistaPouso.y = 120;
+    var level = 0;
+    var eCanvas = document.getElementsByTagName('canvas')[0];
+    eCanvas.width = 500;
+    eCanvas.height = 500;
+    var ctx = eCanvas.getContext('2d');
+    ctx.fillText("Olá Mundo!", 10, 10);
 
-      var barreira = new Sprite();
-      barreira.color = "red";
-      barreira.width = 36;
-      barreira.height = 36;
-      barreira.x = 50;
-      barreira.y = 50;
+    var pistaPouso = new Sprite();
+    pistaPouso.color = "green";
+    pistaPouso.width = 250;
+    pistaPouso.height = 250;
+    pistaPouso.x = 200;
+    pistaPouso.y = 420;
 
-      var barreira2 = new Sprite();
-      barreira2.color = "red";
-      barreira2.width = 30;
-      barreira2.height = 30;
-      barreira2.x = 50;
-      barreira2.y = 120;
+    var barreira = new Sprite();
+    barreira.color = "red";
+    barreira.width = 100;
+    barreira.height = 100;
+    barreira.x = 50;
+    barreira.y = 50;
 
-      var azul = new Sprite();
-      var fuel = 100;
-      var acelerando = false;
-      var vermelho = new Sprite();
-      vermelho.x = 150;
-      vermelho.y = 100;
+    var barreira2 = new Sprite();
+    barreira2.color = "red";
+    barreira2.width = 60;
+    barreira2.height = 60;
+    barreira2.x = 200;
+    barreira2.y = 200;
 
-      var fps = 60;
-      var atual = new Date();
-      var anterior = new Date();
-      var dt = 1/fps;
-      var gameRunning = true;
+    var barreira3 = new Sprite();
+    barreira3.color = "red";
+    barreira3.width = 80;
+    barreira3.height = 80;
+    barreira3.x = 50;
+    barreira3.y = 300;
 
-      desenha();
-      function desenha() {
-          if(gameRunning) {
+    var barreira4 = new Sprite();
+    barreira4.color = "red";
+    barreira4.width = 100;
+    barreira4.height = 100;
+    barreira4.x = 50;
+    barreira4.y = 400;
+
+    var azul = new Sprite();
+    var fuel = 100;
+    var acelerando = false;
+    var vermelho = new Sprite();
+    vermelho.x = 150;
+    vermelho.y = 100;
+
+    var fps = 60;
+    var atual = new Date();
+    var anterior = new Date();
+    var dt = 1 / fps;
+    var gameRunning = true;
+
+    desenha();
+    function desenha() {
+        if (gameRunning) {
             requestAnimationFrame(desenha);
+            if(level == 0){
+                return desenhaMenu()
+            }
             atual = new Date();
-            dt = (atual - anterior)/1000;
+            dt = (atual - anterior) / 1000;
 
-            ctx.clearRect(0,0,eCanvas.width,eCanvas.height);
+            ctx.clearRect(0, 0, eCanvas.width, eCanvas.height);
             ctx.fillStyle = "darkgreen";
-            ctx.fillText('dt: ' + dt + " fps: " + Math.floor(1/dt), 10, 10);
-            ctx.fillStyle = 'green';
-            ctx.fillRect(20,20,fuel,5);
+            ctx.fillRect(20, 20, fuel, 5);
             azul.mover(dt);
             vermelho.mover(dt);
-            if(acelerando) {
-              fuel = fuel - 10*dt;
+            if (acelerando) {
+                fuel = fuel - 10 * dt;
             }
 
             azul.desenhar(ctx);
-            vermelho.desenhar(ctx);
+//            vermelho.desenhar(ctx);
             pistaPouso.desenhar(ctx);
             barreira.desenhar(ctx);
             barreira2.desenhar(ctx);
-            checkWinLoseConditions(azul,pistaPouso,fuel,ctx);
+            barreira3.desenhar(ctx);
+            barreira4.desenhar(ctx);
+            checkWinLoseConditions(azul, pistaPouso, fuel, ctx);
             vermelho.color = 'red';
             anterior = atual;
         }
-      }
+    }
 
-      function checkWinLoseConditions(azul,pistaPouso,fuel,ctx){
-        if(gameRunning){
-          if(fuelOver(fuel)){
-            winOrLose(false,ctx);
-            return true;
-          }
+    function desenhaMenu() {
+        if (gameRunning) {
+            ctx.clearRect(0, 0, eCanvas.width, eCanvas.height);
+            ctx.drawImage(il.images["bg"], 1, 0,500,500);
+            ctx.fillStyle = "darkgreen";
+            ctx.font="25px Georgia";
+            ctx.fillText('MoonLander!',100,200);
 
-          if(colidiuComInimigos(azul,[barreira,barreira2])){
-            winOrLose(false,ctx);
-            return true;
-          }
-
-          if(azul.colidiuCom(pistaPouso)){
-            checkSpeedCondition(azul,ctx)
-            return true;
-          }
-          return false;
+            ctx.fillText('Aperte Enter para começar',100,300);
         }
-      }
+    }
 
-      function fuelOver(fuel){
+    function checkWinLoseConditions(azul, pistaPouso, fuel, ctx) {
+        if (gameRunning) {
+            if (fuelOver(fuel)) {
+                winOrLose(false, ctx);
+                return true;
+            }
+
+            if (colidiuComInimigos(azul, [barreira, barreira2])) {
+                winOrLose(false, ctx);
+                return true;
+            }
+
+            if (azul.colidiuCom(pistaPouso)) {
+                checkSpeedCondition(azul, ctx)
+                return true;
+            }
+            return false;
+        }
+    }
+
+    function fuelOver(fuel) {
         return fuel <= 0;
-      }
+    }
 
-      function checkSpeedCondition(azul,ctx){
-        if(azul.vx > 50 || azul.vy > 50){
-          winOrLose(false,ctx);
-          return;
+    function checkSpeedCondition(azul, ctx) {
+        if (azul.vx > 50 || azul.vy > 50) {
+            winOrLose(false, ctx);
+            return;
         }
-        winOrLose(true,ctx);
-      }
+        winOrLose(true, ctx);
+    }
 
-      function winOrLose(playerWins,ctx){
+    function winOrLose(playerWins, ctx) {
+        if(level == 1 && playerWins){
+            level = 2;
+            pistaPouso.x = 0;
+            pistaPouso.y = 420;
+            azul.x = 300;
+            barreira.x = 180;
+            barreira2.x = 200;
+            barreira3.x = 200;
+            barreira4.x = 300;
+            azul.y = 50;
+            fuel = 100;
+            return;
+        }
         gameRunning = false;
         message = (playerWins) ? "VICTORY!" : "GAME OVER!";
         ctx.fillStyle = "darkgreen";
         ctx.fillText(message, 100, 50);
-      }
+    }
 
-      function colidiuComInimigos(azul,arrayInimigos){
-         for(i=0; i < arrayInimigos.length; i++){
-           if(azul.colidiuCom(arrayInimigos[i])){
-             return true
-           }
-         }
-         return false;
-      }
+    function colidiuComInimigos(azul, arrayInimigos) {
+        for (i = 0; i < arrayInimigos.length; i++) {
+            if (azul.colidiuCom(arrayInimigos[i])) {
+                return true
+            }
+        }
+        return false;
+    }
 
-      addEventListener("keydown",function (e){
+    addEventListener("keydown", function (e) {
         switch (e.keyCode) {
-          case 37:
-            azul.ax = -100;
-            acelerando = true;
-            break;
-          case 38:
-            azul.ay = -100;
-            acelerando = true;
-            break;
-          case 39:
-            azul.ax = +100;
-            acelerando = true;
-            break;
-          case 40:
-            azul.ay = +100;
-            acelerando = true;
-            break;
-          /*case 32:
-              azul.vy = azul.vy - 80;
-              break;*/
-          default:
+            case 13:
+                if(level == 0) level = 1;
+                break;
+            case 37:
+                azul.ax = -100;
+                acelerando = true;
+                break;
+            case 38:
+                azul.ay = -100;
+                acelerando = true;
+                break;
+            case 39:
+                azul.ax = +100;
+                acelerando = true;
+                break;
+            case 40:
+                azul.ay = +100;
+                acelerando = true;
+                break;
+                /*case 32:
+                 azul.vy = azul.vy - 80;
+                 break;*/
+            default:
 
         }
-      });
+    });
 
-      addEventListener("keyup",function (e){
+    addEventListener("keyup", function (e) {
         switch (e.keyCode) {
-          case 37:
-            azul.ax = 0;
-            acelerando = false;
-            break;
-          case 38:
-            azul.ay = 0;
-            acelerando = false;
-            break;
-          case 39:
-            azul.ax = 0;
-            acelerando = false;
-            break;
-          case 40:
-            azul.ay = 0;
-            acelerando = false;
-            break;
-          default:
+            case 37:
+                azul.ax = 0;
+                acelerando = false;
+                break;
+            case 38:
+                azul.ay = 0;
+                acelerando = false;
+                break;
+            case 39:
+                azul.ax = 0;
+                acelerando = false;
+                break;
+            case 40:
+                azul.ay = 0;
+                acelerando = false;
+                break;
+            default:
 
         }
-      });
+    });
 
-    </script>
-  </body>
+</script>
+</body>
 </html>

@@ -35,3 +35,17 @@ Sprite.prototype.colidiuCom = function (alvo) {
 
   return true;
 };
+
+Sprite.prototype.desenharImg = function (ctx, img) {
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.angle*2*Math.PI/360);
+    ctx.rotate(Math.PI/2);
+    ctx.fillStyle = this.color;
+    ctx.drawImage(img, -this.width/2, -this.height/2, this.width, this.height);
+    if(this.debug){
+        ctx.strokeStyle = "grey";
+        ctx.strokeRect(-this.width/2, -this.height/2, this.width, this.height);
+    }
+    ctx.restore();
+};
